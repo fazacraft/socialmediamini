@@ -324,14 +324,18 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
-                        <input type="text" placeholder="post a comment" class="bg-transparent max-h-10 shadow-none">
-                        <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
-                            <a href="#"> <i class="uil-image"></i></a>
-                            <a href="#"> <i class="uil-video"></i></a>
+                    <form action="/comment/{{ post.id }}/" method="POST">
+                        {% csrf_token %}
+                        <div class="bg-gray-100 bg-gray-100 rounded-full rounded-md relative ">
+                            <div>
+                                <input type="text" placeholder="post a comment"
+                                       class="bg-transparent max-h-10 shadow-none" name="comment">
+                            </div>
+                            <div class="absolute bottom-0 flex h-full items-center right-0 right-3 text-xl space-x-2">
+                                <a href="/comment/{{ post.id }}/"> <i class="uil-telegram"></i></a>
+                            </div>
                         </div>
-                    </div>
+                    </form>
 
                 </div>
 
