@@ -15,7 +15,7 @@ from .models import Post, Profile, Comment
 def home_view(request):
     posts = Post.objects.filter(is_published = True).order_by('-created_at')
     user = request.user
-    users = User.objects.filter(is_staff = False).exclude(id = user.id)
+    users = User.objects.filter(is_staff=False, is_superuser=False).exclude(id = user.id)
     d = {
         'posts': posts,
         'users': users
@@ -106,7 +106,6 @@ def post_view(request):
     return render(request,'index.html')
 
 def comment_view(request, pk):
-    print(1)
     if request.method == "POST":
         post = Post.objects.get(id = pk)
         message = request.POST.get('comment')
@@ -114,7 +113,4 @@ def comment_view(request, pk):
 
         comment = Comment.objects.create(author = author , message = message, post = post)
         comment.save()
-        print(2)
         return redirect('/')
-    print(3)
-    return HttpResponse('qonday')
