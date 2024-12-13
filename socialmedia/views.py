@@ -1,17 +1,21 @@
+from typing import reveal_type
+
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Post, Profile
+from .models import Post, Profile, Comment
 
 
 @login_required(login_url='/signin')
 def home_view(request):
-    posts = Post.objects.filter(is_published = True)
-    users = User.objects.filter(is_staff = False)
+    posts = Post.objects.filter(is_published = True).order_by('-created_at')
+    user = request.user
+    users = User.objects.filter(is_staff = False).exclude(id = user.id)
     d = {
         'posts': posts,
         'users': users
@@ -57,13 +61,9 @@ def signin_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        print(1)
-        print(username)
         auth = authenticate(request, username=username, password=password)
-        print(2)
-        print(auth, type(auth))
+
         if auth:
-            print(3)
             login(request, auth)
             return redirect('/')
         else:
@@ -95,7 +95,6 @@ def upload_image_view(request):
 def post_view(request):
     if request.method == 'POST':
 
-
         if 'image' in request.FILES:
             image = request.FILES['image']
 
@@ -105,3 +104,17 @@ def post_view(request):
         return redirect('/')
 
     return render(request,'index.html')
+
+def comment_view(request, pk):
+    print(1)
+    if request.method == "POST":
+        post = Post.objects.get(id = pk)
+        message = request.POST.get('comment')
+        author = request.user
+
+        comment = Comment.objects.create(author = author , message = message, post = post)
+        comment.save()
+        print(2)
+        return redirect('/')
+    print(3)
+    return HttpResponse('qonday')
