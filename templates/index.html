@@ -32,9 +32,10 @@
             <!--<div class="triger" uk-toggle="target: #wrapper ; cls: sidebar-active">
                 <i class="uil-bars"></i>
             </div>-->
-
+            <form action="/search/" method="post">
+            {% csrf_token %}
             <div class="header_search">
-                <input type="text" placeholder="Search for username..">
+                <input name="searchbek" type="text" placeholder="Search for username..">
                 <div class="icon-search">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                          stroke="currentColor">
@@ -43,7 +44,9 @@
                     </svg>
                 </div>
             </div>
-
+            </form>
+            <div>
+            </div>
         </div>
         <div class="right-side lg:pr-4">
             <!-- upload -->
@@ -93,23 +96,35 @@
                     </g>
                 </svg>
             </a>
+
             <div uk-drop="mode: click;offset: 4" class="header_dropdown">
                 <h4
                         class="-mt-5 -mx-5 bg-gradient-to-t from-gray-100 to-gray-50 border-b font-bold px-6 py-3">
                     Notification </h4>
                 <ul class="dropdown_scrollbar" data-simplebar>
                     <li>
+                         {% for noti in noties %}
                         <a href="#">
-                            <div class="drop_avatar"><img src="{% static 'assets/images/avatars/avatar-1.jpg' %}"
+                            <div class="drop_avatar"><img src="{{ noti.user_act.profile.picture.url }}"
                                                           alt="">
                             </div>
                             <div class="drop_content">
-                                <p><strong class="text-link">Taiye</strong>
-                                    <span class="text-link"> is following you  </span>
+                                <p><strong class="text-link">{{ noti.user_act }}</strong>
+                                    <span class="text-link"> is
+                                        {% if noti.type == 0 %}
+                                         liked
+                                        {% elif noti.type == 1 %}
+                                        commented
+                                        {% else %}
+                                        followed
+                                        {% endif %}
+                                        you
+                                    </span>
                                 </p>
                                 <span class="time-ago"> 2 hours ago </span>
                             </div>
                         </a>
+                        {% endfor %}
                     </li>
 
 
@@ -157,7 +172,7 @@
             </a>
             <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
                 <ul>
-                    <li><a href="#">Current user: {{ request.user.username }} </a></li>
+                    <li><a href="/profile/?post_author_id={{ request.user.profile.id }}">Current user: {{ request.user.username }} </a></li>
                     <li><a href="/setting"> Account setting </a></li>
                     <li><a href="explore.html">explore </a></li>
 
@@ -179,7 +194,7 @@
         <div class="space-y-5 flex-shrink-0 lg:w-7/12">
             {% for post in posts %}
             <!-- post 1-->
-            <div class="bg-white shadow rounded-md  -mx-2 lg:mx-0">
+            <div id="{{ post.id }}" class="bg-white shadow rounded-md  -mx-2 lg:mx-0">
 
                 <!-- post header-->
                 <div class="flex justify-between items-center px-4 py-3">
@@ -190,7 +205,8 @@
                                      class="bg-gray-200 border border-white rounded-full w-8 h-8">
                             </div>
                         </a>
-                        <a href="/profile/?post_author_id={{ post.author.profile.id }}" class="block capitalize font-semibold "> {{ post.author.username }} </a>
+                        <a href="/profile/?post_author_id={{ post.author.profile.id }}"
+                           class="block capitalize font-semibold "> {{ post.author.username }} </a>
                     </div>
                     <div>
                         <a href="#"> <i
@@ -240,7 +256,7 @@
                 </div>
 
                 <div>
-                    <a href="{% static 'assets/images/post/img4.jpg' %}">
+                    <a href="{{ post.image.url }}">
                         <img src="{{ post.image.url }}" alt="photo">
                     </a>
                 </div>
@@ -249,28 +265,18 @@
                 <div class="py-3 px-4 space-y-3">
 
                     <div class="flex space-x-4 lg:font-bold">
-                        <form method="get">
-                            <a href="/like/?post_id={{ post.id }}" id="like-button" class="flex items-center space-x-2"
-                               onclick="toggleLike(this)">
-                                <div class="fb-like" data-href="http://w3c.org#4242" data-send="true" data-width="450"
-                                     data-show-faces="true">
-                                    <!-- Default: Unfilled Icon -->
-                                    <svg id="unfilled-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                         fill="none" stroke="currentColor" width="25" height="25">
-                                        <path d="M3 8l7-7 7 7M5 10v6a2 2 0 002 2h6a2 2 0 002-2v-6" stroke-width="2"
-                                              stroke-linecap="round" stroke-linejoin="round"/>
+                            <a href="/like/?post_id={{ post.id }}" class="flex items-center space-x-2">
+                                <div class="p-2 rounded-full text-black">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                         width="25" height="25" class="">
+                                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
                                     </svg>
-
-                                    <!-- Filled Icon (Hidden Initially) -->
-                                    <svg id="filled-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                         fill="currentColor" width="25" height="25" style="display: none;">
-                                        <path d="M3 8l7-7 7 7M5 10v6a2 2 0 002 2h6a2 2 0 002-2v-6"/>
-                                    </svg>
-
                                 </div>
+                                <span>{{ post.likes_count }}</span>
+
                             </a>
 
-                        </form>
+
                         <a href="#" class="flex items-center space-x-2">
                             <div class="p-2 rounded-full text-black">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
@@ -280,7 +286,7 @@
                                           clip-rule="evenodd"/>
                                 </svg>
                             </div>
-
+                            <span>{{ post.comments_count }}</span>
                         </a>
                         <a href="#" class="flex items-center space-x-2 flex-1 justify-end">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -296,21 +302,24 @@
                     <p> {{ post.text }}</p>
                     <div class="flex items-center space-x-3">
                         <div class="flex items-center">
-                            {% if post.likes_count < 0 %}
+                            {% if post.likes_count == 0 %}
                             {% else %}
                             {% for liked_user in post.likes.all %}
+                            {% if forloop.counter < 4 %}
                             <img src="{{ liked_user.author.profile.picture.url }}" alt=""
                                  class="w-6 h-6 rounded-full border-2 border-white ">
+                            {% endif %}
                             {% endfor %}
                         </div>
                         <div class="">
-                            {%  with post.likes.all|dictsortreversed:"created_at"|first as last_like  %}
+                            {% with post.likes.all|dictsortreversed:"created_at"|first as last_like %}
                             Liked <strong>{{ last_like.author.username }}</strong>
                             {% endwith %}
                             {% if post.likes_count == 0 %}
+                            {% elif post.likes_count|add:"-1" == 0  %}
 
                             {% else %}
-                            and <strong> {{ post.likes_count }} </strong>
+                            and <strong> {{ post.likes_count|add:"-1" }} </strong>
                             {% endif %}
                             {% endif %}
                         </div>
@@ -318,10 +327,13 @@
 
                     <div class="border-t pt-4 space-y-4 ">
                         {% for comment in post.comments.all %}
-                        <div class="flex">
+                        <div id = "{{ comment.id }}" class="flex">
+
                             <div class="w-10 h-10 rounded-full relative flex-shrink-0">
+
                                 <img src="{{ comment.author.profile.picture.url }}" alt=""
                                      class="absolute h-full rounded-full w-full">
+
                             </div>
                             <div class="text-gray-700 py-2 px-3 rounded-md bg-gray-100 h-full relative lg:ml-5 ml-2 lg:mr-20   ">
                                 <p class="leading-6"> {{ comment.message }}
@@ -353,13 +365,12 @@
 
             </div>
 
-            {% if forloop.counter|divisibleby:2 %}
+
             <div class="flex justify-center mt-6" uk-toggle="target: #toggle ;animation: uk-animation-fade">
                 <a href="#"
                    class="bg-white  font-semibold my-3 px-6 py-2 rounded-full shadow-md  ">
                     Load more ..</a>
             </div>
-            {% endif %}
 
             {% endfor %}
 
@@ -384,12 +395,13 @@
                                 <img src="{{ user.profile.picture.url }}" class="bg-gray-200 rounded-full w-10 h-10">
                             </a>
                             <div class="flex flex-col">
-                                <span class="block capitalize font-semibold"> {{ user.username }}</span>
-                                <span class="block capitalize text-sm"> 320k followers </span>
+                                <a href="/profile/?post_author_id={{ user.profile.id }}"
+                                   class="block capitalize font-semibold"> {{ user.username }}</a>
+                                <span class="block capitalize text-sm">{{ user.profile.following_count }} followers </span>
                             </div>
                         </div>
 
-                        <a href="/follow/?user_id={{ user.id }}"
+                        <a href="/follow_from_home/?user_id={{ user.id }}"
                            class="border border-gray-200 font-semibold px-4 py-1 rounded-full hover:bg-pink-600 hover:text-white hover:border-pink-600 ">
                             Follow </a>
                     </div>

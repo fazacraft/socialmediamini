@@ -38,46 +38,49 @@
 #
 # print(qposts)
 
-users = [
-    {'id': 1, 'username': 'Fazliddin'},
-    {'id': 2, 'username': 'Usmon'},
-    {'id': 3, 'username': 'Beknur'},
-    {'id': 4, 'username': 'Abdulaziz'},
-    {'id': 5, 'username': 'Sarvar'},
-    {'id': 6, 'username': 'SARDOR'}
+# users = [
+#     {'id': 1, 'username': 'Fazliddin'},
+#     {'id': 2, 'username': 'Usmon'},
+#     {'id': 3, 'username': 'Beknur'},
+#     {'id': 4, 'username': 'Abdulaziz'},
+#     {'id': 5, 'username': 'Sarvar'},
+#     {'id': 6, 'username': 'SARDOR'}
+#
+# ]
+#
+# follow_objects = [
+#     {'follower': 1, 'following': '3'},
+#     {'follower': 1, 'following': '6'},
+#     {'follower': 3, 'following': '6'},
+#     {'follower': 2, 'following': '6'},
+# ]
+#
+#
+# user_id = 1
+# unfollowed_users = []
+#
+# black_list = []
+#
+# for user in follow_objects:
+#     if user['follower'] == user_id:
+#         black_list.append(int(user['following']))
+#
+# print(black_list)
+#
+# res3=[]
+#
+# black_list3 = list(filter(lambda x: x['id'] != 1 and x['id'] not in black_list, users))
+# res0 = list(filter(lambda user: user['id'] != 1 and user['id'] not in black_list, users))
+#
+# print(black_list3)
+# for user in users:
+#     if user['id']!=1 and user['id'] not in black_list:
+#         res3.append(user)
+#
+# print(res3)
 
-]
+def main():
+    print(((-5.06) - 0.02 + 6.08) * (8.22 - 5.82))
 
-follow_objects = [
-    {'follower': 1, 'following': '3'},
-    {'follower': 1, 'following': '6'},
-    {'follower': 3, 'following': '6'},
-    {'follower': 2, 'following': '6'},
-]
-
-
-user_id = 1
-unfollowed_users = []
-
-black_list = []
-
-for user in follow_objects:
-    if user['follower'] == user_id:
-        black_list.append(int(user['following']))
-
-print(black_list)
-
-res3=[]
-
-black_list3 = list(filter(lambda x: x['id'] != 1 and x['id'] not in black_list, users))
-res0 = list(filter(lambda user: user['id'] != 1 and user['id'] not in black_list, users))
-
-print(black_list3)
-for user in users:
-    if user['id']!=1 and user['id'] not in black_list:
-        res3.append(user)
-
-print(res3)
-
-
-
+if __name__ == '__main__':
+    main()

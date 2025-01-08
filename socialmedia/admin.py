@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.contrib.auth.models import User
 
-from socialmedia.models import Post, Comment, Profile, UserLikePost, UserFollow
+from socialmedia.models import Post, Comment, Profile, UserLikePost, UserFollow, Notification
 
 
 # Register your models here.
@@ -8,7 +9,7 @@ from socialmedia.models import Post, Comment, Profile, UserLikePost, UserFollow
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('id',  'author', 'created_at', 'updated_at', 'is_published')
+    list_display = ('id',  'author', 'created_at', 'updated_at')
 
 
 @admin.register(Comment)
@@ -17,7 +18,7 @@ class CommentAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user')
+    list_display = ('id', 'user', 'last_name', 'first_name', 'email', 'created_at', 'updated_at')
 
 @admin.register(UserLikePost)
 class UserLikePostAdmin(admin.ModelAdmin):
@@ -26,6 +27,12 @@ class UserLikePostAdmin(admin.ModelAdmin):
 @admin.register(UserFollow)
 class UserFollowAdmin(admin.ModelAdmin):
     list_display = ('id', 'follower', 'created_at','following')
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_act', 'type','created_at','user_accept')
+
+
 
 # @admin.register(Category)
 # class CategoryAdmin(admin.ModelAdmin):
